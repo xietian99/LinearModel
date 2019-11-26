@@ -16,8 +16,12 @@ test_that("fit",{
   expect_equal(linearFit(X2, Y2),"Design matrix is not a full rank matrix, please cheak it")
 
   # # test predict function
-  # newX = matrix(rnorm(p),ncol=p)
-  # predict(lm1, data.frame(X = newX))
+  newX = rnorm(p)
+  expect_equal(lmPredict(lm2, newX)[1], sum(lm1$coefficients * c(1,newX)) )
+
+  newX = matrix(rnorm(2*p), ncol = p)
+  expect_equal(lmPredict(lm2, newX), cbind(rep(1,2), newX) %*% lm1$coefficients)
+
 
   # test GLH_test
   library(gmodels)

@@ -40,7 +40,7 @@ linearFit = function(X, Y){
     result = list()
     result$coefficients = beta
     result$test = t_test(beta, se_beta)
-    # conf_interval
+    result$CI = confidInt(beta, se_beta)
     result$estimate = Y_hat
     result$MSE = MSE
     result$df.res = obs - q
@@ -54,6 +54,8 @@ linearFit = function(X, Y){
 confidInt = function(point, se){
   lowCI = point - 1.96 * se
   uppCI = point + 1.96 * se
+  result = cbind(lowCI,uppCI)
+  colnames(result) = c('lowCI','uppCI')
   return(c(lowCI, uppCI))
 }
 
