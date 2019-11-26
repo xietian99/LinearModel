@@ -20,7 +20,7 @@ You can install `LinearModel` from Github:
 devtools::install_github("xietian99/LinearModel", build_vignettes = T)
 ```
 
-## Tutoriol
+## Tutorio
 For detailed usage of the packge, please use `browseVignettes("LinearModel")` to see examples after package installation.
 
 ## Getting Help
