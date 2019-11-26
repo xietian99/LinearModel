@@ -34,7 +34,14 @@ This is a linear regression model
   X = matrix(rnorm(n*p, 10, 0.1),n,p)
   error = rnorm(n, 0, 1)
   Y = cbind(rep(1,n),X) %*% beta + error
-  compare = bench::mark( as.vector(lm(Y~X)$coefficients), as.vector(linearFit(X,Y)$coefficient))
-  # print(compare)
+  compare = bench::mark( as.vector(lm(Y~X)$coefficients), as.vector(linearFit(X,Y)$coefficients) )
+  print(compare)
   plot(compare)
+```
+
+# prediction
+```{r}
+  mylm = linearFit(X,Y)
+  newX = matrix(rnorm(p),ncol=p)
+  lmPredict(mylm,newX)
 ```

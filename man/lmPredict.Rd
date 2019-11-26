@@ -9,7 +9,7 @@ lmPredict(model, newX)
 \arguments{
 \item{model}{input fitted linear model}
 
-\item{newX}{input indicator variable matrix,
+\item{newX}{input indicator variable matrix, without intercept 1.
 one-dimension vector works as well}
 }
 \value{
@@ -23,7 +23,7 @@ n = 1e3
 p = 20
 Y = runif(n,-5,5)
 X = matrix(rnorm(n*p,0,1),n,p)
-newX = rnorm(p)
+newX = matrix(rnorm(p),ncol=p)
 model = linearFit(X,Y)
 lmPredict(model,newX)
 

@@ -1,24 +1,26 @@
 Package: LinearModel
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Fitted a linear regression model, conduct single variable testing, 
+    conduct Generalized Linear Hypothesis testing
 Version: 0.1.0
-Author: Who wrote it
+Author: Tian Xie
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
-Imports:     
+Imports: 
     bench,
     nlme,
     tidyverse,
     stats,
-    ggbeeswarm
+    ggbeeswarm,
+    gmodels,
 Suggests: 
     knitr,
     rmarkdown,
-    testthat
+    testthat (>= 2.1.0)
 VignetteBuilder: knitr
 RoxygenNote: 7.0.1
 NB: this package now depends on R (>= 3.5.0)

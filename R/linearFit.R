@@ -20,7 +20,8 @@ linearFit = function(X, Y){
   obs = nrow(X)
   X = cbind(rep(1,obs),X)
   q = ncol(X)
-  if (det(t(X)%*%X)!=0){
+  isfullrk = tryCatch(solve(t(X)%*%X), error = function(e) e)
+  if (!any(class(isfullrk) == "error")){
     X_part = solve(t(X)%*%X) %*% t(X)
     beta = X_part %*% Y
     hat_matrix = X %*% X_part
@@ -32,35 +33,38 @@ linearFit = function(X, Y){
     SSY = sum((Y - mean(Y))^2)
     R_square = 1 - SSE / SSY
 
-    # variance
-    # cov_beta = MSE * solve(t(X)%*%X)
-    # se_beta = sqrt(diag(cov_beta))
-    # SingleTest = t_test(beta, se_beta)
+    # variance & single variable test
+    cov_beta = MSE * solve(t(X)%*%X)
+    se_beta = sqrt(diag(cov_beta))
+
     result = list()
-    result$coefficient = beta
+    result$coefficients = beta
+    result$test = t_test(beta, se_beta)
+    # conf_interval
     result$estimate = Y_hat
     result$MSE = MSE
+    result$df.res = obs - q
     result$R_square = R_square
+    result$cov_beta = cov_beta
     return(result)
   } else print('Design matrix is not a full rank matrix, please cheak it')
 }
 
-# # confidence Interval
-# confidInt = function(point, se){
-#   lowCI = point - 1.96 * se
-#   uppCI = point + 1.96 * se
-#   return(c(lowCI, uppCI))
-# }
-#
-# # t-test, return corresponding p-value
-# t_test = function(point, se){
-#   t = point / se
-#   p = stats::pnorm(-abs(t)) + 1 - stats::pnorm(abs(t))
-#   result = list()
-#   result$t_value = t
-#   result$p_value = p
-#   return(result)
-# }
+# confidence Interval
+confidInt = function(point, se){
+  lowCI = point - 1.96 * se
+  uppCI = point + 1.96 * se
+  return(c(lowCI, uppCI))
+}
+
+# t-test, return corresponding p-value
+t_test = function(point, se){
+  t = point / se
+  p = stats::pnorm(-abs(t)) + 1 - stats::pnorm(abs(t))
+  result = cbind(t,p)
+  colnames(result) = c('t_stats','p_value')
+  return(result)
+}
 
 # TypeIII test -- C++
 
