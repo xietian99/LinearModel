@@ -1,0 +1,38 @@
+---
+title: "Introduction to LinearModel"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Intro}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.width=7,
+  comment = "#>"
+)
+```
+```{r setup}
+library(bench)
+library(nlme)
+library(stats)
+library(tidyverse)
+library(LinearModel)
+```
+
+# Intro
+This is a linear regression model
+
+# Compare my linear model with orginial R function
+```{r}
+  n = 1e3; p = 20
+  beta = runif(p+1, -5, 5)
+  X = matrix(rnorm(n*p, 10, 0.1),n,p)
+  error = rnorm(n, 0, 1)
+  Y = cbind(rep(1,n),X) %*% beta + error
+  compare = bench::mark( as.vector(lm(Y~X)$coefficients), as.vector(linearFit(X,Y)$coefficient))
+  # print(compare)
+  plot(compare)
+```
