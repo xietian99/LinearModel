@@ -10,7 +10,7 @@ lmPredict(model, newX)
 \item{model}{input fitted linear model}
 
 \item{newX}{input indicator variable matrix, without intercept 1.
-one-dimension vector works as well}
+one-dimension vector works as well.}
 }
 \value{
 the estimated Y-value

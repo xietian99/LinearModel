@@ -14,7 +14,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-```{r setup}
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 library(tidyverse)
 library(ggbeeswarm)
 library(bench)
@@ -24,24 +25,69 @@ library(LinearModel)
 
 ```
 
-# Intro
-This is a linear regression model
+# Introduction
+This is a linear regression model package.  
+$$Y = X\beta + \epsilon$$
+where $\epsilon$ follows normal distribution $N(0,\sigma^2I_n)$. This package include three main function. `linearFit()` fit linear regression model over data. `lmPredict()` predict response value of new observations, based on the fitted model. `GLHtest()` conduct Genaralized Linear Hypothesis testing.
+We will use a simulated data to introduce these functions.
 
-# Compare my linear model with orginial R function
+
+# Examples
+## Simulate Data
+Generate simulated data: suppose true linear model is $Y = X\beta + \epsilon$,  where we let $\sigma^2 = 0.1$. Set constant $\beta = (\beta_0, \beta_1, \beta_2, \beta_3, \beta_4)$. We generate $n=1000$ observations with $p=4$ indicator variables, combined with intercept term. 
 ```{r}
-  n = 1e3; p = 20
+  # simulate data
+  beta = c(-1,0,1,2,1.5)
+  n = 1e3; p = 4
+  set.seed(100)
+  X = matrix(runif(n*p, -100, 100),n,p)
+  error = rnorm(n, 0, 0.1)
+  Y = cbind(rep(1,n),X) %*% beta + error
+```
+
+## Fit the models
+Use both `linearFit()` and originial function `lm()` to fit the model on the simulated data.
+```{r}
+lm1 = linearFit(X,Y)
+lm2 = lm(Y~X)
+# Print coefficients from both models and the true value.
+print(c(lm1$coefficients))
+print(lm2$coefficients)
+print(beta) # this is the true 
+```
+From the result, we know the estimators is pretty precise. Single variable testing results are saved in `lm$test`, the 95% confidence interval of each $\hat\beta_i$ is stored in `lm1$CI` $\hat var(\hat\beta)$ is saved in `lm1$cov_beta`, $\hat\sigma^2$ is svaed in `lm$MSE`.
+```{r}
+print(lm1$test)
+print(c(lm1$MSE, lm1$df.res, lm1$R_square))
+```
+
+## Predict with models
+Randomly generate a new observation, predict its Y-value
+```{r}
+  mylm = linearFit(X,Y)
+  newX = matrix(runif(p,-100,100),ncol=p)
+  lmPredict(mylm,newX)
+```
+
+## GLH testing
+Test $H_0: \beta_2 = \beta_3 = \beta_4$. 
+```{r}
+# contrast matrix 
+T = matrix(c(0,0,1,-1,0,
+             0,0,0,1,-1), nrow=2)
+# GLHtest(lm1, T)
+```
+
+# Correctness and Efficiency
+Generate a $1e4 * 30$ indicator variable matrix, we compare it with original `lm` function as regard to correctness and efficiency.
+```{r}
+  n = 1e4; p = 30
   beta = runif(p+1, -5, 5)
   X = matrix(rnorm(n*p, 10, 0.1),n,p)
-  error = rnorm(n, 0, 1)
+  error = rnorm(n, 0, 2)
   Y = cbind(rep(1,n),X) %*% beta + error
   compare = bench::mark( as.vector(lm(Y~X)$coefficients), as.vector(linearFit(X,Y)$coefficients) )
   print(compare)
   plot(compare)
 ```
-
-# prediction
-```{r}
-  mylm = linearFit(X,Y)
-  newX = matrix(rnorm(p),ncol=p)
-  lmPredict(mylm,newX)
-```
+My implementation fail to use rcpp to optimize, and is nearly 10 times slower than `lm` function. 

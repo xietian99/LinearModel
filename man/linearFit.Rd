@@ -7,12 +7,16 @@
 linearFit(X, Y)
 }
 \arguments{
-\item{X}{input indicator variable matrix/design matrix}
+\item{X}{input indicator variable matrix, not including intercept 1}
 
 \item{Y}{input response variable vector}
 }
 \value{
-the coefficient of each indicator variable and corresponding
+a list
+$coefficient: the coefficient of each indicator variable and corresponding;
+$test: single variable t-statistics and corresponding p-value
+$CI: 95% confidence interval of coefficient estimate.
+$MSE, $df.res
 }
 \description{
 Gets the fitted linear regression model results

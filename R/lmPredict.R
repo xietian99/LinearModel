@@ -4,7 +4,7 @@
 #'
 #'@param model input fitted linear model
 #'@param newX input indicator variable matrix, without intercept 1.
-#'one-dimension vector works as well
+#'one-dimension vector works as well.
 #'
 #'@return the estimated Y-value
 #'

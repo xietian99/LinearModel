@@ -2,10 +2,15 @@
 #'
 #'Gets the fitted linear regression model results
 #'
-#'@param X input indicator variable matrix/design matrix
+#'@param X input indicator variable matrix, not including intercept 1
 #'@param Y input response variable vector
 #'
-#'@return the coefficient of each indicator variable and corresponding
+#'@return a list
+#' $coefficient: the coefficient of each indicator variable and corresponding;
+#' $test: single variable t-statistics and corresponding p-value
+#' $CI: 95% confidence interval of coefficient estimate.
+#' $MSE, $df.res
+#'
 #'
 #'@examples
 #'n = 1e3
@@ -50,7 +55,7 @@ linearFit = function(X, Y){
   } else print('Design matrix is not a full rank matrix, please cheak it')
 }
 
-# confidence Interval
+# 95% confidence Interval
 confidInt = function(point, se){
   lowCI = point - 1.96 * se
   uppCI = point + 1.96 * se
@@ -59,7 +64,7 @@ confidInt = function(point, se){
   return(c(lowCI, uppCI))
 }
 
-# t-test, return corresponding p-value
+# t-test, return t_statistics and corresponding p-value
 t_test = function(point, se){
   t = point / se
   p = stats::pnorm(-abs(t)) + 1 - stats::pnorm(abs(t))
@@ -68,6 +73,3 @@ t_test = function(point, se){
   return(result)
 }
 
-# TypeIII test -- C++
-
-# TypeI test -- C++

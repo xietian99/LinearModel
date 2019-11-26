@@ -1,13 +1,13 @@
-#' Prices of 50,000 round cut diamonds.
+#' Fatalism,
 #'
-#' A dataset containing the prices and other attributes of almost 54,000
-#' diamonds.
+#' A partial dataset from stroke study of 620 objects; measurement are collected on
+#' their fatalism status, sex, age, race, and depression.
 #'
 #' @format A data frame with 53940 rows and 10 variables:
 #' \describe{
-#'   \item{Fatalism}{price, in US dollars}
-#'   \item{Age}{weight of the diamond, in carats}
-#'   \item{R_E}{Race, Ethinity}
+#'   \item{Fatalism}{Fatalism score}
+#'   \item{Age}{object's age }
+#'   \item{R_E}{Race, Ethinity, non-Hi-American =1,  Mexican American = 0}
 #'   \item{Sex}{Female=1, male=0}
 #'   \item{Depression}{depression score}
 #'
