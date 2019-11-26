@@ -15,11 +15,13 @@ knitr::opts_chunk$set(
 )
 ```
 ```{r setup}
+library(tidyverse)
+library(ggbeeswarm)
 library(bench)
 library(nlme)
 library(stats)
-library(tidyverse)
 library(LinearModel)
+
 ```
 
 # Intro
